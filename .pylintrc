@@ -1,0 +1,112 @@
+[MASTER]
+
+ignore=migrations,tests
+load-plugins=pylint_quotes
+persistent=yes
+extension-pkg-whitelist=ujson,pydantic
+
+
+[MESSAGES CONTROL]
+
+disable=
+  abstract-method,
+  invalid-name,
+  locally-disabled,
+  missing-docstring,
+  duplicate-code,
+  c-extension-no-member,
+  fixme,
+  raise-missing-from,
+  unsubscriptable-object,
+  too-few-public-methods
+
+
+[REPORTS]
+
+output-format=colorized
+reports=no
+score=yes
+
+
+[REFACTORING]
+
+max-nested-blocks=5
+
+
+[MISCELLANEOUS]
+
+notes=FIXME,XXX,TODO
+
+
+[VARIABLES]
+
+# Tells whether we should check for unused import in __init__ files.
+init-import=no
+
+
+[FORMAT]
+
+max-line-length=120
+max-module-lines=1000
+
+
+[CLASSES]
+
+defining-attr-methods=__init__,__new__
+
+# List of valid names for the first argument in a class method.
+valid-classmethod-first-arg=cls
+
+# List of valid names for the first argument in a metaclass class method.
+valid-metaclass-classmethod-first-arg=mcs
+
+
+[IMPORTS]
+
+# Allow wildcard imports from modules that define __all__.
+allow-wildcard-with-all=no
+
+
+[DESIGN]
+
+# Maximum number of arguments for function / method
+max-args=8
+
+# Maximum number of attributes for a class (see R0902).
+max-attributes=12
+
+# Maximum number of boolean expressions in a if statement
+max-bool-expr=8
+
+# Maximum number of branch for function / method body
+max-branches=12
+
+# Maximum number of locals for function / method body
+max-locals=15
+
+# Maximum number of parents for a class (see R0901).
+max-parents=24
+
+# Maximum number of public methods for a class (see R0904).
+max-public-methods=20
+
+# Maximum number of return / yield for function / method body
+max-returns=6
+
+# Maximum number of statements in function / method body
+max-statements=50
+
+# Minimum number of public methods for a class (see R0903).
+min-public-methods=1
+
+
+[EXCEPTIONS]
+
+overgeneral-exceptions=Exception
+
+
+[QUOTES]
+
+string-quote=single-avoid-escape
+triple-quote=single
+docstring-quote=double

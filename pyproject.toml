@@ -1,0 +1,34 @@
+[tool.poetry]
+name = "workshop2022"
+version = "0.0.1"
+description = "Demo project for workshop for Definition"
+authors = [
+    "Zerion Inc <inbox@zerion.io>",
+]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+pip = "^21.2.1"
+asyncpg = "^0.23.0"
+fastapi = "^0.63.0"
+uvicorn = "^0.14.0"
+uvloop = "^0.15.3"
+httpx = "^0.22.0"
+
+[tool.poetry.dev-dependencies]
+isort = "^5.8.0"
+wheel = "^0.36.2"
+pylint = "^2.7.2"
+pylint-quotes = "^0.2.1"
+mypy = "^0.812"
+
+[tool.poetry.scripts]
+workshop2022 = "workshop2022.cli:cli"
+
+[build-system]
+requires = ["poetry-core>=1.1.7"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.isort]
+line_length = 120
+multi_line_output=5
