@@ -21,3 +21,17 @@ class NodeLog:
     topics: list[str]
     transaction_hash: str
     transaction_index: int
+
+
+@dataclass
+class ZerionAddressPortfolio:
+    assets_value: float
+    deposited_value: float
+    borrowed_value: float
+    locked_value: float
+    staked_value: float
+    arbitrum_assets_value: float
+    bsc_assets_value: float
+    polygon_assets_value: float
+    optimism_assets_value: float
+    total_value: float

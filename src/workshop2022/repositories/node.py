@@ -1,4 +1,4 @@
-from typing import Any, Optional, ClassVar, Type
+from typing import Any, ClassVar, Optional, Type
 
 import httpx
 
@@ -33,7 +33,7 @@ class EthereumNodeRepository:
                     'params': [hex(filter_id)]
                 }
             )
-            return self._serialize_node_logs(response.json()['result'])
+            return self._deserialize_node_logs(response.json()['result'])
 
     async def eth_get_logs(
             self,
@@ -68,15 +68,15 @@ class EthereumNodeRepository:
                 url=ETHEREUM_NODE_URL,
                 json=data
             )
-            return self._serialize_node_logs(response.json()['result'])
+            return self._deserialize_node_logs(response.json()['result'])
 
-    def _serialize_node_logs(self, node_logs_data: list[dict[str, Any]]) -> list[NodeLog]:
+    def _deserialize_node_logs(self, node_logs_data: list[dict[str, Any]]) -> list[NodeLog]:
         return [
-            self._serialize_node_log(node_log_data) for node_log_data in node_logs_data
+            self._deserialize_node_log(node_log_data) for node_log_data in node_logs_data
         ]
 
     @staticmethod
-    def _serialize_node_log(node_log_data: dict[str, Any]) -> NodeLog:
+    def _deserialize_node_log(node_log_data: dict[str, Any]) -> NodeLog:
         return NodeLog(
             address=node_log_data['address'],
             block_hash=node_log_data['blockHash'],

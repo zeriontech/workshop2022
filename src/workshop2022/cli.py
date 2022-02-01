@@ -1,4 +1,5 @@
 import asyncio
+import logging
 
 import click
 import uvicorn
@@ -6,10 +7,12 @@ import uvloop
 
 from workshop2022.api.app import app as api_app
 from workshop2022.background import BackgroundApplication
+from workshop2022.utils import setup_logging
 
 
 @click.group()
 def cli() -> None:
+    setup_logging(log_level=logging.DEBUG)
     asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 
 
