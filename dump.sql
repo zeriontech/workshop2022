@@ -18,7 +18,7 @@ CREATE TABLE params (
 
 
 CREATE TABLE status (
-    id SEQUENCE PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     author_address text NOT NULL,
     text text NOT NULL,
     block_number integer NOT NULL
