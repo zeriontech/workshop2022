@@ -16,7 +16,7 @@ class QueueItem:
     value: Any
 
 
-class ZerionAPIRepository:
+class ZerionAPIStorage:
     _sio: socketio.AsyncClient
     _queues: asyncio.Queue()
 
@@ -59,7 +59,7 @@ class ZerionAPIRepository:
             self._read_reponse('received address portfolio', request_id),
             30
         )
-        return self._deserialize_address_portfolio(response.value['payload']['portfolio'])
+        return ZerionAddressPortfolio.parse_obj(response.value['payload']['portfolio'])
 
     async def _read_reponse(self, message: str, request_id: str) -> QueueItem:
         while True:
@@ -82,18 +82,3 @@ class ZerionAPIRepository:
                 message='received address portfolio',
                 value=data
             ))
-
-    @staticmethod
-    def _deserialize_address_portfolio(portfolio: dict[str, Any]) -> ZerionAddressPortfolio:
-        return ZerionAddressPortfolio(
-            assets_value=portfolio['assets_value'],
-            deposited_value=portfolio['deposited_value'],
-            borrowed_value=portfolio['borrowed_value'],
-            locked_value=portfolio['locked_value'],
-            staked_value=portfolio['staked_value'],
-            arbitrum_assets_value=portfolio['arbitrum_assets_value'],
-            bsc_assets_value=portfolio['bsc_assets_value'],
-            polygon_assets_value=portfolio['polygon_assets_value'],
-            optimism_assets_value=portfolio['optimism_assets_value'],
-            total_value=portfolio['total_value']
-        )

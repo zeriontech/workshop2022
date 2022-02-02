@@ -25,18 +25,9 @@ class BaseTask(metaclass=ABCMeta):
                 break
 
 
-
-class LoadMissingLogsTask(BaseTask):
-    async def task(self) -> None:
-        print('Load missing')
-        while True:
-            await asyncio.sleep(5)
-            print('ok')
-
-
 class TrackNewLogsTask(BaseTask):
     async def task(self) -> None:
         print('Track new tasks')
         while True:
-            await asyncio.sleep(2)
             print('ggwp')
+            await asyncio.sleep(15)

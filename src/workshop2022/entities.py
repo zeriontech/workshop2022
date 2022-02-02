@@ -1,17 +1,18 @@
-from dataclasses import dataclass
 from datetime import datetime
+from http import HTTPStatus
+
+from pydantic import BaseModel, Field
 
 
-@dataclass
-class Status:
-    author: str
+class Status(BaseModel):
+    id: int
+    author_address: str
     text: str
     posted_at: datetime
+    block_number: int
 
 
-
-@dataclass
-class NodeLog:
+class NodeLog(BaseModel):
     address: str
     block_hash: str
     block_number: int
@@ -23,8 +24,7 @@ class NodeLog:
     transaction_index: int
 
 
-@dataclass
-class ZerionAddressPortfolio:
+class ZerionAddressPortfolio(BaseModel):
     assets_value: float
     deposited_value: float
     borrowed_value: float
@@ -35,3 +35,17 @@ class ZerionAddressPortfolio:
     polygon_assets_value: float
     optimism_assets_value: float
     total_value: float
+
+
+class ResponseSchema(BaseModel):
+    code: HTTPStatus
+    status: str
+
+
+class SuccessResponseSchema(ResponseSchema):
+    code: HTTPStatus = Field(HTTPStatus.OK)
+    status: str = Field('success')
+
+
+class FeedSuccessResponseSchema(SuccessResponseSchema):
+    data: list[Status]

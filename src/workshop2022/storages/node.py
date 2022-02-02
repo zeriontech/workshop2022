@@ -1,17 +1,15 @@
-from typing import Any, ClassVar, Optional, Type
+from typing import Any, Optional
 
-import httpx
+import aiohttp
 
 from workshop2022.entities import NodeLog
 from workshop2022.settings import ETHEREUM_NODE_URL, MESSAGE_STORAGE_CONTRACT_ADDRESS
 
 
-class EthereumNodeRepository:
-    Client: ClassVar[Type[httpx.AsyncClient]] = httpx.AsyncClient
-
+class EthereumNodeStorage:
     async def eth_new_filter(self) -> int:
-        async with self.Client() as client:
-            response = await client.post(
+        async with aiohttp.ClientSession() as session:
+            request = session.post(
                 url=ETHEREUM_NODE_URL,
                 json={
                     'jsonrpc': '2.0',
@@ -21,11 +19,12 @@ class EthereumNodeRepository:
                     }]
                 }
             )
-            return int(response.json()['result'], 16)
+            async with request as response:
+                return int(response.json()['result'], 16)
 
     async def eth_get_filter_changes(self, filter_id: int) -> list[NodeLog]:
-        async with self.Client() as client:
-            response = await client.post(
+        async with aiohttp.ClientSession() as session:
+            request = session.post(
                 url=ETHEREUM_NODE_URL,
                 json={
                     'jsonrpc': '2.0',
@@ -33,7 +32,8 @@ class EthereumNodeRepository:
                     'params': [hex(filter_id)]
                 }
             )
-            return self._deserialize_node_logs(response.json()['result'])
+            async with request as response:
+                return self._deserialize_node_logs(response.json()['result'])
 
     async def eth_get_logs(
             self,
@@ -63,12 +63,13 @@ class EthereumNodeRepository:
         if params:
             data['params'].append(params)
 
-        async with self.Client() as client:
-            response = await client.post(
+        async with aiohttp.ClientSession() as session:
+            request = session.post(
                 url=ETHEREUM_NODE_URL,
                 json=data
             )
-            return self._deserialize_node_logs(response.json()['result'])
+            async with request as response:
+                return self._deserialize_node_logs(response.json()['result'])
 
     def _deserialize_node_logs(self, node_logs_data: list[dict[str, Any]]) -> list[NodeLog]:
         return [
@@ -77,14 +78,4 @@ class EthereumNodeRepository:
 
     @staticmethod
     def _deserialize_node_log(node_log_data: dict[str, Any]) -> NodeLog:
-        return NodeLog(
-            address=node_log_data['address'],
-            block_hash=node_log_data['blockHash'],
-            block_number=int(node_log_data['blockNumber'], 16),
-            data=node_log_data['data'],
-            log_index=int(node_log_data['logIndex'], 16),
-            removed=node_log_data['removed'],
-            topics=node_log_data['topics'],
-            transaction_hash=node_log_data['transactionHash'],
-            transaction_index=int(node_log_data['transactionIndex'], 16)
-        )
+        return NodeLog.parse_obj(node_log_data)
