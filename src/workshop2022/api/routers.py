@@ -1,10 +1,7 @@
-from typing import Optional
-
 from fastapi import APIRouter
 
 from workshop2022.entities import FeedSuccessResponseSchema
 from workshop2022.services import FeedService
-
 
 feed_router = APIRouter(
     prefix='/feed',

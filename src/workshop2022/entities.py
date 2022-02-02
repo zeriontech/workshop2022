@@ -1,4 +1,3 @@
-from datetime import datetime
 from http import HTTPStatus
 
 from pydantic import BaseModel, Field
@@ -8,21 +7,19 @@ class Status(BaseModel):
     id: int
     author_address: str
     text: str
-    posted_at: datetime
     block_number: int
 
 
 class NodeLog(BaseModel):
     address: str
-    block_hash: str
-    block_number: int
-    data: str
-    log_index: int
     removed: bool
     topics: list[str]
-    transaction_hash: str
-    transaction_index: int
-
+    data: str
+    block_hash: str = Field(alias='blockHash')
+    block_number: str = Field(alias='blockNumber')
+    log_index: str = Field(alias='logIndex')
+    transaction_hash: str = Field(alias='transactionHash')
+    transaction_index: str = Field(alias='transactionIndex')
 
 class ZerionAddressPortfolio(BaseModel):
     assets_value: float
@@ -34,6 +31,16 @@ class ZerionAddressPortfolio(BaseModel):
     bsc_assets_value: float
     polygon_assets_value: float
     optimism_assets_value: float
+    total_value: float
+
+
+class AddressPortfolio(BaseModel):
+    address: str
+    assets_value: float
+    borrowed_value: float
+    deposited_value: float
+    locked_value: float
+    staked_value: float
     total_value: float
 
 

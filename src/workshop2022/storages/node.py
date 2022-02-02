@@ -7,6 +7,20 @@ from workshop2022.settings import ETHEREUM_NODE_URL, MESSAGE_STORAGE_CONTRACT_AD
 
 
 class EthereumNodeStorage:
+    async def eth_block_number(self) -> int:
+        async with aiohttp.ClientSession() as session:
+            request = session.post(
+                url=ETHEREUM_NODE_URL,
+                json={
+                    'jsonrpc': '2.0',
+                    'method': 'eth_blockNumber',
+                    'params': []
+                }
+            )
+            async with request as response:
+                data = await response.json()
+                return int(data['result'], 16)
+
     async def eth_new_filter(self) -> int:
         async with aiohttp.ClientSession() as session:
             request = session.post(
@@ -20,7 +34,8 @@ class EthereumNodeStorage:
                 }
             )
             async with request as response:
-                return int(response.json()['result'], 16)
+                data = await response.json()
+                return int(data['result'], 16)
 
     async def eth_get_filter_changes(self, filter_id: int) -> list[NodeLog]:
         async with aiohttp.ClientSession() as session:
@@ -33,7 +48,8 @@ class EthereumNodeStorage:
                 }
             )
             async with request as response:
-                return self._deserialize_node_logs(response.json()['result'])
+                data = await response.json()
+                return self._deserialize_node_logs(data['result'])
 
     async def eth_get_logs(
             self,
@@ -69,7 +85,8 @@ class EthereumNodeStorage:
                 json=data
             )
             async with request as response:
-                return self._deserialize_node_logs(response.json()['result'])
+                data = await response.json()
+                return self._deserialize_node_logs(data['result'])
 
     def _deserialize_node_logs(self, node_logs_data: list[dict[str, Any]]) -> list[NodeLog]:
         return [
